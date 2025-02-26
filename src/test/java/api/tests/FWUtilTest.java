@@ -19,7 +19,7 @@ public class FWUtilTest{
         List<List<String>> csvData = fileUtil.getCsvData();
         System.out.println(fileUtil.getTest());
         csvData.forEach(System.out::println);
-        // Just to trigger a build
+        // Trigger a build
     }
 
 }
