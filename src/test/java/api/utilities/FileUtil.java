@@ -15,17 +15,20 @@ public class FileUtil {
     private List<List<String>> csvData;
 
     private FileUtil(String properties, String csvFile){
-        loadProperties(properties);
-        loadTestData(csvFile);
+        if(properties != null && !properties.isBlank())
+            loadProperties(properties);
+        if(csvFile != null && !csvFile.isBlank())
+            loadTestData(csvFile);
     }
 
     private void loadProperties(String filePath){
         properties = new Properties();
         try(FileInputStream inputStream = new FileInputStream(filePath)){
             properties.load(inputStream);
-            LOG.info("Properties loaded successfully from '{}'", filePath);
+            LogHelper.logInfo(this,String.format("Properties loaded successfully from '%s' ", filePath));
+
         }catch (IOException e){
-            LOG.error("Couldn't read properties file ", e);
+            LogHelper.logError(this,"Couldn't read properties file " + e);
         }
     }
 
@@ -37,21 +40,36 @@ public class FileUtil {
             while((line = csvReader.readNext()) != null){
                 csvData.add(Arrays.asList(line));
             }
-            LOG.info("Csv '{}' read successfully", filePath);
+            LOG.info("Data from '{}' loaded successfully", filePath);
         }catch (IOException | CsvValidationException e){
-            LOG.error("Couldn't read csv file", e);
+            LogHelper.logError(this,"Couldn't read csv file " + e);
         }
     }
 
-    public static FileUtil getInstance(String properties, String csvFile){
+    public static void initialize(String propertiesFilePath, String csvFilePath){
         if(instance == null){
-            instance = new FileUtil(properties, csvFile);
+            if((propertiesFilePath == null || propertiesFilePath.isBlank()) && (csvFilePath == null || csvFilePath.isBlank())){
+                throw new IllegalArgumentException("Properties and csv file paths cannot both be unset. Set at least one");
+            }
+            instance = new FileUtil(propertiesFilePath, csvFilePath);
+        }
+    }
+
+    public static FileUtil getInstance(){
+        if(instance == null){
+            throw new IllegalStateException("FileUtil instance is uninitialized. Call initialize first.");
         }
         return instance;
     }
 
-    public String getTest(){
-        return properties.getProperty("test");
+    public String getBaseURI(){
+        if(properties == null) throw new NullPointerException("Cannot load property 'baseURI' because properties=null");
+        return properties.getProperty("baseURI");
+    }
+
+    public List<List<String>> getCsvData(){
+        if(csvData == null) throw new NullPointerException("Couldn't retrieve csv test data - no data was loaded into the csvData list");
+        return csvData;
     }
 
 }

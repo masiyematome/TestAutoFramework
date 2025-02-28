@@ -1,6 +1,0 @@
-2025-02-25 17:09:08 WARN  [main] api.tests.FWUtilTest - The test 'Test used to test utility methods' will be removed once the utilities have been tested
-2025-02-25 17:09:08 INFO  [main] api.utilities.FileUtil - Properties loaded successfully from 'src/test/resources/config.properties'
-2025-02-25 17:09:08 INFO  [main] api.utilities.FileUtil - Csv 'src/test/resources/data/api-test.csv' read successfully
-2025-02-25 20:23:38 WARN  [main] api.tests.FWUtilTest - The test 'Test used to test utility methods' will be removed once the utilities have been tested
-2025-02-25 20:23:38 INFO  [main] api.utilities.FileUtil - Properties loaded successfully from 'src/test/resources/config.properties'
-2025-02-25 20:23:38 INFO  [main] api.utilities.FileUtil - Csv 'src/test/resources/data/api-test.csv' read successfully
