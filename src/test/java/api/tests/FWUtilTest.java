@@ -8,6 +8,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,5 +87,4 @@ public class FWUtilTest{
         assertEquals(HttpStatus.SC_OK, response.statusCode());
         LogUtil.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
     }
-
 }

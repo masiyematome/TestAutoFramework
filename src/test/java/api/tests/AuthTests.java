@@ -10,6 +10,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,7 +42,7 @@ public class AuthTests {
     @Test
     @DisplayName("Just testing my encryption - decryption functionality")
     public void encryptDecrypt(){
-        SecretKey key = ReadKey.readKey(new Doppler(), "AES_KEY");
+        SecretKey key = new SecretKeySpec(System.getenv("AES_KEY").getBytes(StandardCharsets.UTF_8),"AES");
         String data = "Matome Answer Masiye";
         String encryptedData = SecurityHandler.encrypt(key, data);
         String decryptedData = SecurityHandler.decrypt(key, encryptedData);
