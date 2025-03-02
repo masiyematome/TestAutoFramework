@@ -3,13 +3,11 @@ package api.utilities;
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.Getter;
-import org.slf4j.*;
 import java.io.*;
 import java.util.*;
 
 @Getter
 public class FileUtil {
-    private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
     private static FileUtil instance;
     private Properties properties;
     private List<List<String>> csvData;
@@ -25,10 +23,10 @@ public class FileUtil {
         properties = new Properties();
         try(FileInputStream inputStream = new FileInputStream(filePath)){
             properties.load(inputStream);
-            LogHelper.logInfo(this,String.format("Properties loaded successfully from '%s' ", filePath));
+            LogUtil.logInfo(this,String.format("Properties loaded successfully from '%s' ", filePath));
 
         }catch (IOException e){
-            LogHelper.logError(this,"Couldn't read properties file " + e);
+            LogUtil.logError(this,"Couldn't read properties file " + e);
         }
     }
 
@@ -40,9 +38,9 @@ public class FileUtil {
             while((line = csvReader.readNext()) != null){
                 csvData.add(Arrays.asList(line));
             }
-            LOG.info("Data from '{}' loaded successfully", filePath);
+            LogUtil.logInfo(this,"Data from '" + filePath + "' loaded successfully");
         }catch (IOException | CsvValidationException e){
-            LogHelper.logError(this,"Couldn't read csv file " + e);
+            LogUtil.logError(this,"Couldn't read csv file " + e);
         }
     }
 
@@ -61,10 +59,19 @@ public class FileUtil {
         }
         return instance;
     }
-
     public String getBaseURI(){
         if(properties == null) throw new NullPointerException("Cannot load property 'baseURI' because properties=null");
         return properties.getProperty("baseURI");
+    }
+
+    public String getJsonPHBaseURI(){
+        if(properties == null) throw new NullPointerException("Cannot load property 'jsonPHBaseURI' because properties=null");
+        return properties.getProperty("jsonPHBaseURI");
+    }
+
+    public String getApiKey(){
+        if(properties == null) throw new NullPointerException("Cannot load property 'apiKey' because properties=null");
+        return properties.getProperty("apiKey");
     }
 
     public List<List<String>> getCsvData(){

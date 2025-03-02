@@ -2,7 +2,7 @@ package api.utilities;
 
 import org.slf4j.*;
 
-public class LogHelper {
+public class LogUtil {
     private static Logger LOG;
 
     public static void logInfo(Object targetClass, String message){

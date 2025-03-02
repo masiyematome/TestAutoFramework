@@ -4,18 +4,18 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.slf4j.*;
 
-public class ExtentHelper {
-    private static final Logger LOG = LoggerFactory.getLogger(ExtentHelper.class);
-    private static ExtentHelper instance;
+public class ExtentUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(ExtentUtil.class);
+    private static ExtentUtil instance;
     private ExtentReports reports;
 
-    private ExtentHelper(String filePath){
+    private ExtentUtil(String filePath){
         initializeReport(filePath);
     }
 
-    public static ExtentHelper getInstance(String filePath){
+    public static ExtentUtil getInstance(String filePath){
         if(instance == null){
-            instance = new ExtentHelper(filePath);
+            instance = new ExtentUtil(filePath);
         }
         return instance;
     }

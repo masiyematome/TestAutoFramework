@@ -5,15 +5,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
-
-import java.util.HashMap;
 import java.util.Map;
 
 
-public class ApiHelper {
+public class ApiUtil {
 
     public static Response sendRequest(HttpMethod method, String endPoint, String requestBody, Map<String, String> params){
-        RestAssured.baseURI = FileUtil.getInstance().getBaseURI();
         var request = setParams(params);
         return switch (method){
             case GET -> request

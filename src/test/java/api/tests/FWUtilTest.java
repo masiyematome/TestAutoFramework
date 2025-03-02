@@ -2,9 +2,12 @@ package api.tests;
 
 import api.constants.HttpMethod;
 import api.utilities.*;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
+
+import java.io.File;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,15 +18,16 @@ public class FWUtilTest{
 
     @BeforeAll
     public void setup(){
-        LogHelper.logInfo(this, "Setting up for tests");
+        LogUtil.logInfo(this, "Setting up for tests");
         String propertiesFile = "src/test/resources/config.properties";
         String csvDataFile = "src/test/resources/data/api-test.csv";
         FileUtil.initialize(propertiesFile, csvDataFile);
+        RestAssured.baseURI = FileUtil.getInstance().getJsonPHBaseURI();
     }
 
     @BeforeEach
     public void setupForEach(TestInfo testInfo){
-        LogHelper.logInfo(this,"starting test '" + testInfo.getDisplayName() + "'");
+        LogUtil.logInfo(this,"starting test '" + testInfo.getDisplayName() + "'");
     }
 
     @Test
@@ -31,9 +35,9 @@ public class FWUtilTest{
     public void getData(TestInfo testInfo) {
         String endPoint = "/users";
         Map<String, String> params = new HashMap<>();
-        Response response = ApiHelper.sendRequest(HttpMethod.GET,endPoint, "", params);
+        Response response = ApiUtil.sendRequest(HttpMethod.GET,endPoint, "", params);
         response.prettyPrint();
-        LogHelper.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
+        LogUtil.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
     }
 
     @Test
@@ -48,9 +52,9 @@ public class FWUtilTest{
                 """;
         Map<String, String> params = new HashMap<>();
         params.put("header_Content-Type","application/json");
-        Response response = ApiHelper.sendRequest(HttpMethod.POST, endPoint, requestBody, params);
+        Response response = ApiUtil.sendRequest(HttpMethod.POST, endPoint, requestBody, params);
         response.prettyPrint();
-        LogHelper.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
+        LogUtil.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
     }
 
     @Test
@@ -65,10 +69,10 @@ public class FWUtilTest{
                 """;
         Map<String, String> params = new HashMap<>();
         params.put("header_Content-Type","application/json");
-        params.put("path_id","123");
-        Response response = ApiHelper.sendRequest(HttpMethod.PUT, endPoint, requestBody, params);
+        params.put("path_id","1");
+        Response response = ApiUtil.sendRequest(HttpMethod.PUT, endPoint, requestBody, params);
         response.prettyPrint();
-        LogHelper.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
+        LogUtil.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
     }
 
     @Test
@@ -77,10 +81,10 @@ public class FWUtilTest{
         String endPoint = "/users/{id}";
         Map<String, String> params = new HashMap<>();
         params.put("path_id","2");
-        Response response = ApiHelper.sendRequest(HttpMethod.DELETE, endPoint, "", params);
+        Response response = ApiUtil.sendRequest(HttpMethod.DELETE, endPoint, "", params);
         response.print();
-        assertEquals(HttpStatus.SC_NO_CONTENT, response.statusCode());
-        LogHelper.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        LogUtil.logInfo(this,"'" + testInfo.getDisplayName() + "' completed...");
     }
 
 }
