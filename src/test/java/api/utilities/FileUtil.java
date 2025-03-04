@@ -1,10 +1,10 @@
 package api.utilities;
-
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.Getter;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 @Getter
 public class FileUtil {
@@ -59,24 +59,33 @@ public class FileUtil {
         }
         return instance;
     }
-    public String getBaseURI(){
-        if(properties == null) throw new NullPointerException("Cannot load property 'baseURI' because properties=null");
-        return properties.getProperty("baseURI");
+
+    public Properties getProperties(){
+        if (properties == null) throw new RuntimeException("Cannot fetch properties. Properties file not initialized.");
+        return properties;
     }
 
-    public String getJsonPHBaseURI(){
-        if(properties == null) throw new NullPointerException("Cannot load property 'jsonPHBaseURI' because properties=null");
-        return properties.getProperty("jsonPHBaseURI");
+    public static String getDataFromFile(String filePath){
+        StringBuilder builder = new StringBuilder();
+        try(FileInputStream fis = new FileInputStream(filePath)){
+            int data;
+            while((data = fis.read()) !=-1){
+                builder.append((char) data);
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error processing file '" + filePath + "'", e);
+        }
+        return builder.toString();
     }
 
-    public String getApiKey(){
-        if(properties == null) throw new NullPointerException("Cannot load property 'apiKey' because properties=null");
-        return properties.getProperty("apiKey");
-    }
-
-    public List<List<String>> getCsvData(){
-        if(csvData == null) throw new NullPointerException("Couldn't retrieve csv test data - no data was loaded into the csvData list");
-        return csvData;
+    public static void createAFile(String source, String target){
+        try{
+            FileOutputStream fos = new FileOutputStream(target);
+            fos.write(source.getBytes());
+            fos.close();
+        }catch (Exception e){
+            throw new RuntimeException("Error creating file '" + target + "'", e);
+        }
     }
 
 }

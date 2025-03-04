@@ -12,7 +12,7 @@ public class ApiUtil {
 
     public static Response sendRequest(HttpMethod method, String endPoint, String requestBody, Map<String, String> params){
         var request = setParams(params);
-        return switch (method){
+        Response response = switch (method){
             case GET -> request
                     .when()
                     .get(endPoint)
@@ -32,6 +32,8 @@ public class ApiUtil {
                     .then().extract().response();
             default -> throw new UnsupportedOperationException("Method '" + method + "' unsupported.");
         };
+        LogUtil.logInfo(ApiUtil.class, "Successfully made " + method.name() + " request to " + RestAssured.baseURI + endPoint);
+        return response;
     }
 
     public static RequestSpecification setParams(Map<String, String> params){
