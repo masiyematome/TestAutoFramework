@@ -20,7 +20,7 @@ public class Doppler implements SecretKeyReader{
             String computedKey = jObject.get("computed").getAsString();
             return new SecretKeySpec(computedKey.getBytes(StandardCharsets.UTF_8),"AES");
         }catch (IOException e){
-            LogUtil.logError(this, "Couldn't read secret key from Doppler" + e);
+            LogUtil.logError(this.getClass(), "Couldn't read secret key from Doppler" + e);
             throw new RuntimeException("Couldn't read secret key from Doppler", e);
         }
     }

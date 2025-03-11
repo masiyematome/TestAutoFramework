@@ -1,43 +1,42 @@
 package api.utilities;
 
 import io.restassured.RestAssured;
-import lombok.*;
-import java.util.*;
 
-@Setter
-@Getter
+import java.util.Properties;
+
 public class TestBase {
     private Properties properties;
-    private List<List<String>> csvData;
+    private String propertiesFilePath;
 
-    public TestBase(String propertiesFile, String csvDataFile){
-        setDataForTest(propertiesFile, csvDataFile);
+    public void setProperties(String propertiesFilePath){
+        this.properties = FileUtil.getProperties(propertiesFilePath);
+        this.propertiesFilePath = propertiesFilePath;
     }
 
-    private void setDataForTest(String propertiesFile, String csvDataFile){
-        FileUtil.initialize(propertiesFile, csvDataFile);
-        FileUtil fileUtil = FileUtil.getInstance();
-        properties = fileUtil.getProperties();
-        csvData = fileUtil.getCsvData();
-    }
-
-    public void setBaseURI(){
-        if(properties == null) {
-            throw new NullPointerException("Cannot load property 'baseURI' because properties=null");
+    public String get(String property){
+        String propertyValue;
+        if(properties == null){
+            LogUtil.logError(this.getClass(),"Couldn't get target property '" + property + "' because properties=null. Call setProperties first.");
+            throw new RuntimeException("Couldn't get target property '" + property + "' because properties=null. Call setProperties first.");
         }
-        RestAssured.baseURI = properties.getProperty("baseURI");
-        LogUtil.logInfo(this, "Base Url set: " + RestAssured.baseURI);
-    }
 
-    public String getApiKey(){
-        return System.getenv("API_KEY");
-    }
-
-    public List<List<String>> getCsvData(){
-        if(csvData == null) {
-            throw new NullPointerException("Couldn't retrieve csv test data - no data was loaded into the csvData list");
+        if(property.isBlank()){
+            LogUtil.logError(this.getClass(), "Couldn't fetch blank / null c'" + property + "'");
+            throw new RuntimeException("Couldn't fetch blank / null property '" + property + "'.");
         }
-        return csvData;
+
+        propertyValue = properties.getProperty(property);
+        LogUtil.logInfo(this.getClass(), "Retrieved property '" + property + "': " + propertyValue);
+
+        return properties.getProperty(property);
+    }
+
+    public void setBaseURI(String key){
+        RestAssured.baseURI = get(key);
+    }
+
+    public String getAccessToken(){
+        return ApiUtil.getAccessToken(get("googleAuthKeyPath"));
     }
 
 }
