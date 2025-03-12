@@ -5,9 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Collections;
+import java.io.*;
 import java.util.Map;
 
 
@@ -78,6 +76,20 @@ public class ApiUtil {
         };
         LogUtil.logInfo(ApiUtil.class, "Successfully made " + method.name() + " request to " + RestAssured.baseURI + endPoint);
         return response;
+    }
+
+    public static void convertToFile(byte[] fileContent, String targetDestination){
+        if(targetDestination == null || targetDestination.isBlank()){
+            LogUtil.logError(ApiUtil.class, "Failure converting file content to file. " + targetDestination + " is not a valid file path or name.");
+            throw new IllegalArgumentException("\"" + targetDestination + "\""+ " is not a valid file path or name.");
+        }
+
+        try(FileOutputStream fos = new FileOutputStream(targetDestination)){
+            fos.write(fileContent);
+        }catch (IOException e){
+            LogUtil.logError(ApiUtil.class, "Error while converting file response content to file '" + targetDestination + "'." + e);
+            throw new RuntimeException("Error while converting file response content to file '" + targetDestination + "'", e);
+        }
     }
 
     public static RequestSpecification setParams(Map<String, Object> params){

@@ -5,6 +5,7 @@ import api.utilities.*;
 import com.google.gson.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -51,7 +52,7 @@ public class GenTests extends TestBase{
         String fileId = sendFileResponse.jsonPath().getString("id");
         params.put("header_Content-Type","application/json");
         params.put("path_id", fileId);
-        Response updateFileResponse = ApiUtil.sendRequest(HttpMethod.PATCH, get("googleUpdateFileAPIEndpoint"), fieldToUpdate,params);
+        Response updateFileResponse = ApiUtil.sendRequest(HttpMethod.PATCH, get("googleGetTargetFileAPIEndpoint"), fieldToUpdate,params);
         updateFileResponse.prettyPrint();
     }
 
@@ -68,21 +69,32 @@ public class GenTests extends TestBase{
     }
 
     @Test
+    @DisplayName("Fetch file by Id")
+    public void fetchFileById() throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("header_Authorization", "Bearer " + accessToken);
+        params.put("path_id", "0B2wgx2eABkEuQlM3VDhKTDRIcHlfa015WUdCczN3UDQ0Uk9J");
+        Response response = ApiUtil.sendRequest(HttpMethod.GET,get("googleGetFileMetaDataEndpoint"),"", params);
+        String fileName = response.jsonPath().getString("name");
+        response = ApiUtil.sendRequest(HttpMethod.GET,get("googleGetFileContentEndpoint"),"", params);
+        ApiUtil.convertToFile(response.asByteArray(),"src/test/resources/api-downloads/"+fileName);
+    }
+
+    @Test
     @Order(3)
     @DisplayName("Delete files by IDs")
     public void deleteFilesById(){
-        String endPoint = "/drive/v3/files";
         Map<String, Object> params = new HashMap<>();
         params.put("header_Authorization", "Bearer " + accessToken);
         params.put("header_Accept", "application/json");
-        Response response_get = ApiUtil.sendRequest(HttpMethod.GET, endPoint,"", params);
+        Response response_get = ApiUtil.sendRequest(HttpMethod.GET, get("googleGetFilesAPIEndpoint"),"", params);
         JsonArray jsonArray = JsonParser.parseString(response_get.asString()).getAsJsonObject().getAsJsonArray("files");
 
         for(JsonElement object:jsonArray){
             if(object.getAsJsonObject().get("name").getAsString().equals("ApiTestFile_"+time)){
                 String id = object.getAsJsonObject().get("id").getAsString();
-                params.put("path_fileId", id);
-                Response response = ApiUtil.sendRequest(HttpMethod.DELETE, endPoint + "/{fileId}", "", params);
+                params.put("path_id", id);
+                Response response = ApiUtil.sendRequest(HttpMethod.DELETE, get("googleGetTargetFileAPIEndpoint"), "", params);
                 System.out.println("status code after deleting '" + id + "': " + response.statusCode());
                 response.prettyPrint();
             }
