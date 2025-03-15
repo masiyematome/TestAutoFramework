@@ -37,8 +37,7 @@ public class FileUtil {
 
     public static List<List<String>> getTestData(String filePath) {
         List<List<String>> csvData = new ArrayList<>();
-        try (CSVReader csvReader = new CSVReaderBuilder(new FileReader(filePath))
-                .withSkipLines(1).build()) {
+        try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
             String[] line;
             while ((line = csvReader.readNext()) != null) {
                 csvData.add(Arrays.asList(line));
@@ -46,6 +45,7 @@ public class FileUtil {
             LogUtil.logInfo(FileUtil.class, "Data from '" + filePath + "' loaded successfully");
         } catch (IOException | CsvValidationException e) {
             LogUtil.logError(FileUtil.class, "Couldn't read csv file " + e);
+            throw new RuntimeException(e);
         }
         return csvData;
     }
