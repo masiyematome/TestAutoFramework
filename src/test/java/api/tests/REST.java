@@ -4,6 +4,7 @@ import api.constants.HttpMethod;
 import api.utilities.*;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import commons.LogUtil;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import java.util.*;
@@ -19,8 +20,8 @@ public class REST extends TestBase {
 
     @BeforeAll
     public void setup(){
-        setProperties("src/test/resources/config.properties");
-        setTestData("src/test/resources/data/get-api-scenarios/get-lyrics-api.csv");
+        setProperties("src/test/resources/api/config.properties");
+        setTestData("src/test/resources/api/data/get-api-scenarios/get-lyrics-api.csv");
         reports = initializeReport();
         params = new HashMap<>();
     }

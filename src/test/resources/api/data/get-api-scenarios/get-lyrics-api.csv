@@ -1,0 +1,5 @@
+test_id,test_description,song_artist,song_title,endPoint,expected_SC
+001,Get lyrics for Beatles - Hey Jude,Beatles,Hey Jude,/{artist}/{title},200
+002,Get lyrics for Coldplay - Fix You,Coldplay,Fix You,/{artist}/{title},200
+003,Attempt to get lyrics for a non-existent artist and song,UnknownArtist,RandomSong,/{artist}/{title},404
+004,Send an invalid request with missing artist and title (bad input),,,/{artist}/{title},404

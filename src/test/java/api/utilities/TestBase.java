@@ -2,6 +2,9 @@ package api.utilities;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import commons.ExtentUtil;
+import commons.FileUtil;
+import commons.LogUtil;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.Getter;

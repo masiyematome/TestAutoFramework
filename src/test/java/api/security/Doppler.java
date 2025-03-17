@@ -1,6 +1,6 @@
 package api.security;
 
-import api.utilities.LogUtil;
+import commons.LogUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

@@ -1,6 +1,6 @@
 package api.security;
 
-import api.utilities.LogUtil;
+import commons.LogUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

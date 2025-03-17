@@ -2,8 +2,8 @@ package api.tests;
 
 import api.constants.HttpMethod;
 import api.utilities.ApiUtil;
-import api.utilities.FileUtil;
-import api.utilities.LogUtil;
+import commons.FileUtil;
+import commons.LogUtil;
 import api.utilities.TestBase;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -23,8 +23,8 @@ public class SOAP extends TestBase {
 
     @BeforeAll
     public void setup(){
-        setProperties("src/test/resources/config.properties");
-        setTestData("src/test/resources/data/soap-api-scenarios/get-country-cap-city.csv");
+        setProperties("src/test/resources/api/config.properties");
+        setTestData("src/test/resources/api/data/soap-api-scenarios/get-country-cap-city.csv");
         reports = initializeReport();
         params = new HashMap<>();
         setBaseURI("capCityBaseURI");
@@ -45,7 +45,7 @@ public class SOAP extends TestBase {
     @DisplayName("Get Capital City for a Country")
     public void getCapCity(TestInfo info){
         ExtentTest test = reports.createTest(info.getDisplayName());
-        String requestBody = FileUtil.getDataFromFile("src/test/resources/data/soap-request-messages/country-info-service.xml");
+        String requestBody = FileUtil.getDataFromFile("src/test/resources/api/data/soap-request-messages/country-info-service.xml");
         params.put("header_Content-Type","text/xml");
         Response response=null;
         for(int i = 1; i < getCsvNumRows(); i++){

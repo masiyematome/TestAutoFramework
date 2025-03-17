@@ -3,21 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\src\test\resources\data\api-test.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\test\resources\data\get-api\get-lyrics-api.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\src\test\resources\data\soap-api-scenarios\get-country-cap-city.csv">
+        <entry key="\src\test\resources\api\data\get-api-scenarios\get-lyrics-api.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
