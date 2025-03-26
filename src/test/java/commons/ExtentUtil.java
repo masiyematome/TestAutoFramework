@@ -25,6 +25,7 @@ public class ExtentUtil {
         }
 
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+
         try {
             extentReports = new ExtentReports();
             ExtentSparkReporter spark = new ExtentSparkReporter("target/reports/test_report_" + time + ".html");
@@ -42,6 +43,7 @@ public class ExtentUtil {
             LogUtil.logError(ExtentUtil.class, "ExtentReports = null. Call initializeReport first.");
             throw new UnsupportedOperationException("ExtentReports = null. Call initializeReport first.");
         }
+
         if(status.equalsIgnoreCase("fail")){
             node.fail(message);
         }else if(status.equalsIgnoreCase("pass")){
@@ -51,13 +53,13 @@ public class ExtentUtil {
         if(response.getHeader("Content-Type").contains("text/xml")){
             node.info(MarkupHelper.createCodeBlock(response.asString(), CodeLanguage.XML));
         }
-
-        if(response.getHeader("Content-Type").contains("application/json")){
+        else if(response.getHeader("Content-Type").contains("application/json")){
             node.info(MarkupHelper.createCodeBlock(response.asString(), CodeLanguage.JSON));
         }
+
     }
 
-    private static Media getScreenshot(WebDriver driver){
+    public static Media getScreenshot(WebDriver driver){
         byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
         String screenShotAsBase64 = Base64.getEncoder().encodeToString(screenshot);
         return MediaEntityBuilder

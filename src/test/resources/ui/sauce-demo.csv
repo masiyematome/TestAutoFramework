@@ -1,0 +1,6 @@
+test_id,test_description,username,password,itemName,itemTotalPrice,orderShippingInfo,firstName,lastName,postalCode
+001,Verify If a user can login to sauce demo,standard_user,secret_sauce,,,,
+002,Verify If a user can login to sauce demo.,performance_glitch_user,secret_sauce
+003,Verify user with invalid credentials cannot login.,locked_out_user,secret_sauce
+004,Verify user with invalid credentials cannot login.,invalid_username,secret_sauce,,,,,
+005,Verify a User Can Successfully Order an Item.,invalid_username,secret_sauce,Sauce Labs Backpack,32.39,Free Pony Express Delivery!,Matome,Masiye,0873
