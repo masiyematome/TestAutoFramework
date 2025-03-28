@@ -10,6 +10,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\test\resources\api\data\soap-api-scenarios\get-country-cap-city.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\test\resources\ui\sauce-demo.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

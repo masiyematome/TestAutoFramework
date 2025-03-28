@@ -1,6 +1,7 @@
 package api.utilities;
 
 import api.constants.HttpMethod;
+import com.google.api.services.drive.DriveScopes;
 import com.google.auth.oauth2.GoogleCredentials;
 import commons.FileUtil;
 import commons.LogUtil;
@@ -107,7 +108,11 @@ public class ApiUtil {
             }else if(key.startsWith("header_")){
                 requestSpec.header(key.replace("header_",""), value);
             }else if(key.startsWith("multipart_")){
-                requestSpec.multiPart(key.replace("multipart_",""), value);
+                if(key.contains("metadata")){
+                    requestSpec.multiPart(key.replace("multipart_",""), value, "application/json");
+                }else{
+                    requestSpec.multiPart(key.replace("multipart_",""), value);
+                }
             }
         }
         return requestSpec;
@@ -118,7 +123,7 @@ public class ApiUtil {
             FileInputStream fis = new FileInputStream(credentialsFile);
             GoogleCredentials credentials = GoogleCredentials
                     .fromStream(fis)
-                    .createScoped("https://www.googleapis.com/auth/drive");
+                    .createScoped(DriveScopes.DRIVE);
             credentials.refreshIfExpired();
             return credentials.getAccessToken().getTokenValue();
         }catch (IOException e){

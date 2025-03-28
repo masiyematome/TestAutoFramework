@@ -1,11 +1,6 @@
-test_id,country,iso_code,capital_city,expected_SC
-001,South Africa,ZA,Cape Town,200
-002,United States,US,Washington,200
-003,United Kingdom,GB,London,200
-004,India,IN,New Delhi,200
-005,Australia,AU,Canberra,200
-006,Canada,CA,Ottawa,200
-007,Germany,DE,Berlin,200
-008,France,FR,Paris,200
-009,Brazil,BR,Brasilia,200
-010,Japan,JP,Tokyo,200
+test_id,test_description,country,iso_code,capital_city_result,expected_SC
+001,Verify user can retrieve capital city.,South Africa,ZA,Cape Town,200
+002,Verify user can retrieve capital city.,United States,US,Washington,200
+003,Verify user can retrieve capital city.,NonExistentCountry,NonExistent,Country not found in the database,200
+004,Verify user can retrieve capital city.,ReversedExisting,SU,Country not found in the database,200
+005,Verify user can retrieve capital city.,,,Country not found in the database,200

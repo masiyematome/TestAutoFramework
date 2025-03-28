@@ -1,5 +1,6 @@
-package api.utilities;
+package api.base;
 
+import api.utilities.ApiUtil;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import commons.ExtentUtil;
@@ -9,16 +10,16 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 @Getter
 public class TestBase {
+    private List<List<String>> scenarioData;
     private Properties properties;
     private List<List<String>> csvData;
     private String csvDataFilePath;
-    private short csvNumRows;
-    private RuntimeException e;
 
     public void setProperties(String propertiesFilePath){
         this.properties = FileUtil.getProperties(propertiesFilePath);
@@ -64,30 +65,35 @@ public class TestBase {
         ExtentUtil.report(node,status,message,response);
     }
 
-    public String get(String field, int row){
-        if(csvData == null || csvData.isEmpty()){
-            LogUtil.logError(this.getClass(),"Csv data is either null or empty. Call setTestData first.");
-            throw new RuntimeException("Csv data is either null or empty. Call setTestData first.");
+    public List<List<String>> setScenarioData(String scenarioTitle){
+        scenarioData = new ArrayList<>();
+        if(csvData == null){
+            LogUtil.logError(this.getClass(),"Couldn't retrieve data because test data file is undefined. setTestData(String) first.");
+            throw new IllegalStateException("Couldn't retrieve data because test data file is undefined.");
         }
-        String fieldValue="";
-        List<List<String>> data = csvData;
-        List<String> currList = data.get(row);
-        int indexOfTarget = data.get(0).indexOf(field);
-        if(indexOfTarget == -1){
-            LogUtil.logError(this.getClass(),"'" + field + "' is not a valid field in the csv file '" + csvDataFilePath + "'");
-            throw new IllegalArgumentException("'" + field + "' is not a valid field in the csv file '" + csvDataFilePath + "'");
+        List<String> headings = csvData.get(0);
+        for(int i = 1; i < csvData.size();i ++){
+            List<String> dataRow = csvData.get(i);
+            if(dataRow.get(headings.indexOf("test_description")).equalsIgnoreCase(scenarioTitle.trim())){
+                scenarioData.add(dataRow);
+            }
         }
-        fieldValue = currList.get(indexOfTarget);
-        return fieldValue;
+        return scenarioData;
     }
 
-    public short getCsvNumRows(){
-        if(csvData == null){
-            LogUtil.logError(this.getClass(),"Csv data is null. Call setTestData first.");
-            throw new RuntimeException("Csv data is null. Call setTestData first.");
+    public int getTestDataNumRows(){
+        if(scenarioData == null){
+            throw new IllegalStateException("Cannot get size of scenario data because scenario data is null / not set.");
         }
+        return scenarioData.size();
+    }
 
-        return (short) csvData.size();
+    public String get(String scenarioTitle,String targetField, int row){
+        List<List<String>> scenarioData = setScenarioData(scenarioTitle);
+        List<String> headings = csvData.get(0);
+        List<String> currRow = scenarioData.get(row);
+        int indexOfTargetField = headings.indexOf(targetField);
+        return currRow.get(indexOfTargetField);
     }
     
 }
